@@ -47,7 +47,7 @@ speciesCounts = data %>%
 View(speciesCounts)
 ```
 
-![](/docs/img/tuteCoralSpTbl.png)
+[![](img/tuteCoralSpTbl.png)](img/tuteCoralSpTbl.png)
 
 ```r
 # just the count matrix
@@ -56,7 +56,7 @@ speciesMtx = as.matrix(speciesCounts[,5:ncol(speciesCounts)])
 View(speciesMtx)
 ```
 
-![](/docs/img/tuteCoralSpMtx.png)
+[![](img/tuteCoralSpMtx.png)](img/tuteCoralSpMtx.png)
 
 ## PERMANOVA
 
@@ -121,7 +121,7 @@ speciesPositionSum = summary(speciesSourceSimper, ordered = T)
 View(speciesPositionSum$inner_outer)
 ```
 
-![](/docs/img/tuteInnOutPos.png)
+[![](img/tuteInnOutPos.png)](img/tuteInnOutPos.png)
 
 ```r
 # position x source
@@ -130,7 +130,7 @@ speciesPosSource = summary(speciesPositionSimper, ordered = T)
 View(speciesPosSource$`outer coral mucus_outer reef water`)
 ```
 
-![](/docs/img/tuteOutMucusWater.png)
+[![](img/tuteOutMucusWater.png)](img/tuteOutMucusWater.png)
 
 It can be helpful to visualise the differences.
 Let's plot the cumulative sums for outer coral mucus versus outer reef water.
@@ -152,7 +152,7 @@ ggplot(outerReef) +
   theme_bw()
 ```
 
-![](/docs/img/tuteCoralSimper.png)
+[![](img/tuteCoralSimper.png)](img/tuteCoralSimper.png)
 
 ## NMDS
 
@@ -178,7 +178,7 @@ ggplot(speciesScores, aes(x=NMDS1,y=NMDS2, color=positionSource, fill=positionSo
   theme_bw()
 ```
 
-![](/docs/img/tuteNmds.png)
+![](img/tuteNmds.png)
 
 ## PCoA
 
@@ -219,7 +219,7 @@ Plot the principle coordinates.
 plot(speciesDispersion, hull=F, ellipse=T, cex=1.5)
 ```
 
-![](/docs/img/tutePcoaUgly.png)
+![](img/tutePcoaUgly.png)
 
 This works fine, but the plot is a bit ugly.
 You can extract the vectors from this object (sample coordinates) and re-plot with ggplot2.
@@ -249,4 +249,4 @@ ggplot(dispVec,aes(x=PCoA1,y=PCoA2,color=positionSource,fill=positionSource))+
   guides(fill=guide_legend(title="Sample location & source"))
 ```
 
-![](/docs/img/tutePcoaPretty.png)
+![](img/tutePcoaPretty.png)
