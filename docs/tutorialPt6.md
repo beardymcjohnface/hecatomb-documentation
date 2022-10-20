@@ -47,12 +47,16 @@ speciesCounts = data %>%
 View(speciesCounts)
 ```
 
+![](/docs/img/tuteCoralSpTbl.png)
+
 ```r
 # just the count matrix
 speciesMtx = as.matrix(speciesCounts[,5:ncol(speciesCounts)])
 
 View(speciesMtx)
 ```
+
+![](/docs/img/tuteCoralSpMtx.png)
 
 ## PERMANOVA
 
@@ -63,12 +67,45 @@ We have two columns of metadata (reef location and sample type) and hence severa
 ```r
 # reef position
 adonis2(speciesMtx ~ position, data = speciesCounts, permutations = 1000, method="bray", by=NULL)
+```
 
+```text
+Permutation test for adonis under reduced model
+Permutation: free
+Number of permutations: 1000
+
+adonis2(formula = speciesMtx ~ position, data = speciesCounts, permutations = 1000, method = "bray", by = NULL)
+         Df SumOfSqs      R2      F   Pr(>F)    
+Model     1   1.2375 0.39347 14.921 0.000999 ***
+Residual 23   1.9077 0.60653                    
+Total    24   3.1452 1.00000                    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+
+```r
 # sample type
 adonis2(speciesMtx ~ source, data = speciesCounts, permutations = 1000, method="bray",by=NULL)
+```
 
+```text
+         Df SumOfSqs      R2      F   Pr(>F)   
+Model     1  0.20195 0.06421 1.5781 0.1568
+Residual 23  2.94323 0.93579              
+Total    24  3.14518 1.00000  
+
+```
+
+```r
 # both
 adonis2(speciesMtx ~ positionSource, data = speciesCounts, permutations = 1000, method="bray",by=NULL)
+```
+
+```text
+         Df SumOfSqs      R2      F   Pr(>F)   
+Model     3   1.5155 0.48184 6.5094 0.000999 ***
+Residual 21   1.6297 0.51816                    
+Total    24   3.1452 1.00000  
 ```
 
 ## SIMPER
@@ -82,12 +119,18 @@ We can follow this up with a SIMPER to find what viral species are driving these
 speciesSourceSimper = with(speciesCounts, simper(speciesMtx, position, permutations = 1000))
 speciesPositionSum = summary(speciesSourceSimper, ordered = T)
 View(speciesPositionSum$inner_outer)
+```
 
+![](/docs/img/tuteInnOutPos.png)
+
+```r
 # position x source
 speciesPositionSimper = with(speciesCounts, simper(speciesMtx, positionSource, permutations = 1000))
 speciesPosSource = summary(speciesPositionSimper, ordered = T)
 View(speciesPosSource$`outer coral mucus_outer reef water`)
 ```
+
+![](/docs/img/tuteOutMucusWater.png)
 
 It can be helpful to visualise the differences.
 Let's plot the cumulative sums for outer coral mucus versus outer reef water.
@@ -108,6 +151,8 @@ ggplot(outerReef) +
   coord_flip() +
   theme_bw()
 ```
+
+![](/docs/img/tuteCoralSimper.png)
 
 ## NMDS
 
@@ -133,6 +178,8 @@ ggplot(speciesScores, aes(x=NMDS1,y=NMDS2, color=positionSource, fill=positionSo
   theme_bw()
 ```
 
+![](/docs/img/tuteNmds.png)
+
 ## PCoA
 
 Another MDS method is to perform a principle components analysis. 
@@ -152,12 +199,27 @@ speciesDispersion = betadisper(speciesDist,group = speciesScores$positionSource)
 permutest(speciesDispersion)
 ```
 
-It's significant!
+```text
+Permutation test for homogeneity of multivariate dispersions
+Permutation: free
+Number of permutations: 999
+
+Response: Distances
+          Df  Sum Sq  Mean Sq      F N.Perm Pr(>F)  
+Groups     3 0.12731 0.042437 2.9312    999  0.055 .
+Residuals 21 0.30403 0.014478                       
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+
+It's significant-ish.
 Plot the principle coordinates.
 
 ```r
 plot(speciesDispersion, hull=F, ellipse=T, cex=1.5)
 ```
+
+![](/docs/img/tutePcoaUgly.png)
 
 This works fine, but the plot is a bit ugly.
 You can extract the vectors from this object (sample coordinates) and re-plot with ggplot2.
@@ -186,3 +248,5 @@ ggplot(dispVec,aes(x=PCoA1,y=PCoA2,color=positionSource,fill=positionSource))+
   theme_bw()+
   guides(fill=guide_legend(title="Sample location & source"))
 ```
+
+![](/docs/img/tutePcoaPretty.png)

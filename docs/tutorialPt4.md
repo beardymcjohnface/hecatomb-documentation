@@ -46,10 +46,6 @@ mean of x mean of y
  81.11595 510.10744 
 ```
 
-**Note: for all the following plots, I've manually added the significance asterisks.**
-
-![](img/tutePodoJitterTTest.png)
-
 **Wilcoxon test**
 
 You might prefer to perform a Wilcoxon test; the syntax is very similar to the t.test:
@@ -73,8 +69,6 @@ data:  podoCounts %>% filter(sampleGroup == "A") %>% pull(n) and podoCounts %>% 
 W = 0, p-value = 0.007937
 alternative hypothesis: true location shift is not equal to 0
 ```
-
-![](img/tutePodoJitterWilc.png)
 
 **Dunn's test**
 
