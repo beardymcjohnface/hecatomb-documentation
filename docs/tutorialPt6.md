@@ -166,7 +166,7 @@ One method is to use the metaMDS function in vegan to generate an NMDS.
 speciesNmds = metaMDS(speciesMtx, distance = 'bray', k = 5, try = 20, trymax = 10000)
 
 # pull the dataframe for plotting
-speciesScores = as.data.frame(scores(speciesNmds))
+speciesScores = as.data.frame(scores(speciesNmds)$sites)
 
 # add the metada back in (speciesMtx contains the counts only)
 speciesScores$positionSource = speciesCounts$positionSource
