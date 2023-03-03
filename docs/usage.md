@@ -3,9 +3,9 @@
 * `hecatomb install` - Install the databases (you should only need to do this once)
 * `hecatomb run` - Run the pipeline
 * `hecatomb test` - Run the test dataset
-* `hecatomb config` - Copy the default config file to the current directory (for use with `--configfile`)
-* `hecatomb listHosts` - List the currently-available host genomes
-* `hecatomb addHost` - Add your own host genome
+* `hecatomb config` - Copy the default config file to the current directory
+* `hecatomb list-hosts` - List the currently-available host genomes
+* `hecatomb add-host` - Add your own host genome
 * `hecatomb combine` - Combine output from multiple Hecatomb runs
 
 
@@ -48,6 +48,30 @@ Hecatomb matches with constrained wildcards like so: `{sampleName}.{extension,fa
 Alternatively you can pass a TSV file just like before, only it will be a 2-column tab separated file,
 but you can mix and match FASTAs and FASTQs to your heart's content.
 
+
+## Default settings
+
+Default run settings are displayed under Hecatomb's help message, available with `hecatomb run -h`.
+The complete default run would look like this:
+
+```bash
+hecatomb run \
+  --reads [readDirectory] \
+  --preprocess paired \
+  --search sensitive \
+  --host human \
+  --output hecatomb.out \
+  --configfile hecatomb.out/hecatomb.config.yaml \
+  --threads 32 \
+  --use-conda \
+  --conda-prefix [hecatombInstallDirectory]/snakemake/conda \
+  --snake-default "--rerun-incomplete --printshellcmds --nolock --show-failed-logs"
+```
+
+The default config settings are shown in the `config.yaml` file.
+See [Configuration](configuration.md) for more details.
+
+
 ## Read annotation + assembly
 
 By default, Hecatomb will annotate your reads and perform an assembly.
@@ -70,20 +94,32 @@ hecatomb run --reads fastq/ --profile slurm
 Running Hecatomb on a HPC with a Snakemake profile is THE BEST WAY to run the pipeline.
 But if you're feeling lazy, just submit a single job with the max resources and use `--threads`.
 
-## Run specific stages
 
-Optionally skip specific stages of Hecatomb by specifying the stages you want to run.
-For instance, skip assembly and run the read-annotations only:
+## Run specific modules
 
-```shell
-hecatomb run --reads fastq/ --profile slurm preprocessing annotations
+Hecatomb consists of several modules:
+```text
+    preprocessing       Preprocessing steps only
+    assembly            Assembly steps (+ preprocessing)
+    annotations         Read annotations (+ preprocessing)
+    ctg_annotations     Contig annotations (+ preprocessing,assembly)
 ```
 
-View the stages that are available to run:
+You can run specific stages by adding these targets onto the end of your Hecatomb command.
+i.e. to ONLY run the preprocessing module:
 
-```shell
-hecatomb run print_stages
+```bash
+hecatomb run --reads reads/ preprocessing
 ```
+
+to ONLY run assembly (and preprocessing which is required for assembly):
+
+```bash
+hecatomb run --reads reads/ assembly
+```
+
+By default, Hecatomb will run all modules. 
+
 
 ## Quicker read annotation
 
@@ -106,7 +142,7 @@ If your sample is from a different source you will need to specify the host geno
 To see what host genomes are available:
 
 ```shell
-hecatomb listHosts
+hecatomb list-hosts
 ```
 
 The following should be available by default: 
@@ -128,7 +164,7 @@ You will need to specify the host genome FASTA file, as well as a name for this 
 Assuming you want to add the llama genome and the FASTA genome file is called `llama.fasta`:
 
 ```shell
-hecatomb addHost --host llama --hostfa llama.fasta
+hecatomb add-host --host llama --hostfa llama.fasta
 ```
 
 You will then be able to run Hecatomb with your new host genome:
