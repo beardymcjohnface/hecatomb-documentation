@@ -19,8 +19,8 @@ We then filtered to only consider amino acid hits that are assigned using the LC
 (`filter(taxMethod=='LCA', alnType=='aa')`) as this usually removes almost all false positive hits.
 Download the ready-to-analysed dataset:
 
-- [coral.bigtable.filtered.csv.gz](https://cloudstor.aarnet.edu.au/plus/s/g3HiH5CXUBrgg9J/download)
-- [meta.coral.csv](https://cloudstor.aarnet.edu.au/plus/s/dhOjeSGL04tKC36/download)
+- [coral.bigtable.filtered.csv.gz](https://open.flinders.edu.au/ndownloader/files/41409408)
+- [meta.coral.csv](https://open.flinders.edu.au/ndownloader/files/41409411)
 
 Read in the data and merge the metadata with the bigtable.
 
