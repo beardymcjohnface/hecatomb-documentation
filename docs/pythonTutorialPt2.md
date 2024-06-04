@@ -67,13 +67,13 @@ sns.set(rc={'figure.figsize':(12,8)})
 Next is to create the FacetGrid so we can display the scatterplot by family:
 
 ```python
-g = sns.FacetGrid(virusesGroup, col="family", hue="alnType", col_wrap=6)
+g = sns.FacetGrid(virusesGroup, col="family", col_wrap=6)
 
 ```
 
 And then create the plot:
 ```python
-g.map(sns.scatterplot, "alnlen", "pident", alpha=.1, sizes=(100,500), size=sizeScatter)
+g.map_dataframe(sns.scatterplot, "alnlen", "pident", alpha=.1, hue="alnType", sizes=(100,500), size=sizeScatter)
 plt.legend(bbox_to_anchor=(5.0,1), loc=0, borderaxespad=2,ncol=6, shadow=True, labelspacing=1.5, borderpad=1.5)
 plt.show()
 
@@ -142,8 +142,8 @@ And plot:
 ```python
 #change the group by line to add in the new filter column
 virusesGroup = viruses.groupby(by=['family','alnType','alnlen','pident','filter'], as_index=False).count()
-g = sns.FacetGrid(virusesGroup, col="family", hue="filter", col_wrap=6)
-g.map(sns.scatterplot, "alnlen", "pident", alpha=.1)
+g = sns.FacetGrid(virusesGroup, col="family", col_wrap=6)
+g.map_dataframe(sns.scatterplot, "alnlen", "pident", alpha=.1, hue="filter")
 plt.legend(bbox_to_anchor=(5.0,1), loc=0, borderaxespad=2,ncol=6, shadow=True, labelspacing=1.5, borderpad=1.5)
 plt.show()
 ```
@@ -163,7 +163,7 @@ viruses = viruses.assign(filter = np.where((viruses.alnlen>150) & (viruses.piden
 Plot with the vertical and horizontal lines to match our cutoffs:
 
 ```python
-g.map(sns.scatterplot, "alnlen", "pident", alpha=.1, sizes=(100,500), size=sizeScatter)
+g.map(sns.scatterplot, "alnlen", "pident", alpha=.1, hue="filter", sizes=(100,500), size=sizeScatter)
 for ax in g.axes.flat:
     ax.tick_params(axis='both', labelleft=True, labelbottom=True)
     ax.axhline(y=75, c='red', linestyle='dashed', label="_horizontal")
